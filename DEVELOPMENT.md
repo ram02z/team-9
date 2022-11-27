@@ -1,5 +1,25 @@
 # Development guide
 
+## Git
+
+### LFS
+
+Ensure you have [Git LFS](https://git-lfs.github.com/) installed to help version large files, which is common in game development.
+
+Try running `$ git lfs status`. If you get an error, run `$ git lfs install` to setup Git LFS for your user account.
+
+### Unity
+
+An optional but a reccommended step would be to setup the [Git for Unity](https://github.com/spoiledcat/git-for-unity) plugin.
+The plugin is a Git client for the Unity editor, that also supports locking files (super useful when collaborating on Unity scenes)
+
+To get setup, follow this [quick install guide](https://github.com/spoiledcat/git-for-unity#quick-install)
+
+#### References
+
+- [Using Git with Unity](https://gist.github.com/j-mai/4389f587a079cb9f9f07602e4444a6ed)
+- [Git for Unity usage guide](https://github.com/spoiledcat/git-for-unity/blob/e0a52aba837d78baa4d6679e568a218591362eae/docs/using/quick-guide.md)
+
 ## Code style
 
 We follow the [Microsoft C# Coding Conventions](https://learn.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions)
