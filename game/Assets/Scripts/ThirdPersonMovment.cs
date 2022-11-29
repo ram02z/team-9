@@ -5,15 +5,15 @@ using UnityEngine;
 public class ThirdPersonMovment : MonoBehaviour
 {
     //References to the controller moving the player and the main camera
-    public CharacterController controller;
-    public Transform cam;
+    public CharacterController CharController;
+    public Transform MainCamera;
 
     //Sensitivity of camera
-    public float speed = 6f;
+    public float Speed = 6f;
 
     //How quickly the camera turns when using it to rotate player
-    public float turnTime = 0.2f;
-    float turnVelocity;
+    public float TurnTime = 0.2f;
+    float TurnVelocity;
 
 
     void Start()
@@ -35,13 +35,13 @@ public class ThirdPersonMovment : MonoBehaviour
         if (direction.magnitude >= 0.1f)
         {
             //Dictates how the character should move according to camera rotation and movment
-            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnVelocity, turnTime);
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + MainCamera.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref TurnVelocity, TurnTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
 
             //Rotates the character with the camera rotation
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            controller.Move(moveDir * speed * Time.deltaTime);
+            CharController.Move(moveDir * Speed * Time.deltaTime);
         }
     }
 }
