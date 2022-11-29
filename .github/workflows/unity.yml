@@ -1,17 +1,6 @@
 name: Unity
 
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - "game/**"
-  pull_request:
-    paths:
-      - "game/**"
-permissions:
-  contents: read
-  pull-requests: read
+on: [push]
 
 jobs:
   build:
