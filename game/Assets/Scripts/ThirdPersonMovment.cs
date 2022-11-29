@@ -9,10 +9,10 @@ public class ThirdPersonMovment : MonoBehaviour
     public Transform MainCamera;
 
     //Sensitivity of camera
-    public float Speed = 6f;
+    public float Speed = 4f;
 
     //How quickly the camera turns when using it to rotate player
-    public float TurnTime = 0.2f;
+    public float TurnTime = 0.1f;
     float TurnVelocity;
 
 
