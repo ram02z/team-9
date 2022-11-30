@@ -40,7 +40,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
-          targetPlatform: WebGL
+          targetPlatform: StandaloneWindows64
           projectPath: game
           # Git LFS reverted migration is causing the build to be flagged as dirty
           allowDirtyBuild: true
