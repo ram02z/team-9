@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:game/Assets/Scenes/Menu.unity.meta
 guid: 85ad3d3c42710714faec9ac5c619596f
+========
+guid: a1f3d6ab75156c64ab27d4a07e39a31f
+>>>>>>>> main:game/Assets/Scenes/ThirdPersonMechanics.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
