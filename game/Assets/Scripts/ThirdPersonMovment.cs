@@ -24,7 +24,7 @@ public class ThirdPersonMovment : MonoBehaviour
 
     void Update()
     {
-        //Gets input from mouse 
+        //Gets input from mouse
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
 
