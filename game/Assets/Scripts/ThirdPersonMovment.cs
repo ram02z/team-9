@@ -19,7 +19,7 @@ public class ThirdPersonMovment : MonoBehaviour
     void Start()
     {
         //Locks cursor to middle of screen and hides it from view
-        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     void Update()

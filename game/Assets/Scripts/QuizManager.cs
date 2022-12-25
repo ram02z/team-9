@@ -1,51 +1,46 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using TMPro;
 using UnityEngine;
+using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 public class QuizManager : MonoBehaviour
 {
     public List<Question> questions;
     public GameObject[] options;
-    public int currentQuestion = 0;
+    public Question currentQuestion;
     public TextMeshProUGUI questionText;
+    public TextMeshProUGUI answerText;
+    public GameObject quizPanel;
+    public GameObject answerPanel;
+
+    private readonly int _noQuestions = 3;
 
     private void Start()
     {
-        LoadQuestions();
+        using StreamReader r = new StreamReader("questions.json");
+        string json = r.ReadToEnd();
+        LoadQuestions(json);
         GenerateQuestion();
-    }
-
-    // FIXME: this is just a hack for now
-    private void End()
-    {
-        Debug.Log("No more questions!");
     }
 
     public void Correct()
     {
-        currentQuestion++;
-        if (questions.Count <= currentQuestion)
-        {
-            End();
-        }
-        else
-        {
-            GenerateQuestion();
-        }
+        GenerateQuestion();
     }
 
     void SetAnswers()
     {
-        Question question = questions[currentQuestion];
         for (int i = 0; i < options.Length; i++)
         {
             var option = options[i];
             option.GetComponent<AnswerManager>().isCorrect = false;
-            option.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = question.choices[i];
+            option.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = currentQuestion.choices[i];
 
-            if (question.answerIndex == i)
+            if (currentQuestion.answerIndex == i)
             {
                 option.GetComponent<AnswerManager>().isCorrect = true;
             }
@@ -54,17 +49,43 @@ public class QuizManager : MonoBehaviour
 
     private void GenerateQuestion()
     {
-        questionText.text = questions[currentQuestion].utterance;
+        if (questions.Count > 0)
+        {
+            currentQuestion = questions[0];
+            questions.RemoveAt(0);
+            questionText.text = currentQuestion.utterance;
+            SetAnswers();
+        }
+        else
+        {
+            Debug.Log("Out of questions");
+        }
 
-        SetAnswers();
     }
 
-    private void LoadQuestions()
+    private void LoadQuestions(string json)
     {
         questions = new List<Question>();
 
-        using StreamReader r = new StreamReader("questions.json");
-        string json = r.ReadToEnd();
-        questions = JsonConvert.DeserializeObject<List<Question>>(json);
+        List<string> errors = new List<string>();
+        // TODO: check if answerIndex is between 0-3
+        // TODO: check if choices has 4 elements
+        questions = JsonConvert.DeserializeObject<List<Question>>(json, new JsonSerializerSettings{
+            Error = delegate(object sender, ErrorEventArgs args)
+            {
+                errors.Add(args.ErrorContext.Error.Message);
+                args.ErrorContext.Handled = true;
+            },
+            Converters = { new IsoDateTimeConverter() }
+        });
+
+        if (errors.Any() || questions == null)
+        {
+            Debug.LogError(errors);
+            return;
+        }
+        
+        var rnd = new System.Random();
+        questions = questions.OrderBy(x => rnd.Next()).Take(_noQuestions).ToList();
     }
 }

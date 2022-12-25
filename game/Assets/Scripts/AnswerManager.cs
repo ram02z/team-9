@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AnswerManager : MonoBehaviour
@@ -9,13 +7,17 @@ public class AnswerManager : MonoBehaviour
 
     public void Answer()
     {
+        quizManager.quizPanel.SetActive(false);
+        quizManager.answerPanel.SetActive(true);
         if (isCorrect)
         {
             Debug.Log("Correct Answer");
+            quizManager.answerText.text = "The code is XXXX";
             quizManager.Correct();
         }
         else
         {
+            quizManager.answerText.text = "Timed out for N seconds";
             Debug.Log("Wrong Answer");
         }
     }
