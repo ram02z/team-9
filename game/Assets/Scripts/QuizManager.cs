@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,7 +11,10 @@ using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 public class QuizManager : MonoBehaviour
 {
+    public List<int> codes;
     public List<Question> questions;
+    public float timeLeft;
+    public bool isTimerOn;
     public GameObject[] options;
     public Question currentQuestion;
     public TextMeshProUGUI questionText;
@@ -19,16 +23,43 @@ public class QuizManager : MonoBehaviour
     public GameObject quizPanel;
     public GameObject answerPanel;
     public Button closeButton;
+    private System.Random _rnd;
 
     private readonly int _noQuestions = 3;
+    private readonly int _noCodes = 4;
+    private readonly float _timeoutLength = 10;
 
     private void Start()
     {
+        _rnd = new System.Random();
+        timeLeft = _timeoutLength;
+        isTimerOn = false;
+        codes = Enumerable.Range(1000, 9000).OrderBy(x => _rnd.Next()).Take(_noCodes).ToList();
         using StreamReader r = new StreamReader("questions.json");
         string json = r.ReadToEnd();
         LoadQuestions(json);
         GenerateQuestion();
         SetupListeners();
+    }
+
+    // TODO: move this function to answerManager
+    private void Update()
+    {
+        if (isTimerOn)
+        {
+            if (timeLeft > 0)
+            {
+                timeLeft -= Time.deltaTime;
+                answerText.text = $"{Mathf.CeilToInt(timeLeft)}";
+            }
+            else
+            {
+                isTimerOn = false;
+                timeLeft = _timeoutLength;
+                answerPanel.SetActive(false);
+                quizPanel.SetActive(true);
+            }
+        }
     }
 
     public void Correct()
@@ -53,7 +84,12 @@ public class QuizManager : MonoBehaviour
 
     void SetupListeners()
     {
-        closeButton.onClick.AddListener(() => quizCanvas.SetActive(false));
+        closeButton.onClick.AddListener(() =>
+        {
+            quizCanvas.SetActive(false);
+            answerPanel.SetActive(false);
+            quizPanel.SetActive(true);
+        });
     }
 
     private void GenerateQuestion()
@@ -94,7 +130,6 @@ public class QuizManager : MonoBehaviour
             return;
         }
         
-        var rnd = new System.Random();
-        questions = questions.OrderBy(x => rnd.Next()).Take(_noQuestions).ToList();
+        questions = questions.OrderBy(x => _rnd.Next()).Take(_noQuestions).ToList();
     }
 }
