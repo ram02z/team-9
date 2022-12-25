@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
 public class QuizManager : MonoBehaviour
@@ -13,9 +14,11 @@ public class QuizManager : MonoBehaviour
     public GameObject[] options;
     public Question currentQuestion;
     public TextMeshProUGUI questionText;
+    public GameObject quizCanvas;
     public TextMeshProUGUI answerText;
     public GameObject quizPanel;
     public GameObject answerPanel;
+    public Button closeButton;
 
     private readonly int _noQuestions = 3;
 
@@ -25,6 +28,7 @@ public class QuizManager : MonoBehaviour
         string json = r.ReadToEnd();
         LoadQuestions(json);
         GenerateQuestion();
+        SetupListeners();
     }
 
     public void Correct()
@@ -45,6 +49,11 @@ public class QuizManager : MonoBehaviour
                 option.GetComponent<AnswerManager>().isCorrect = true;
             }
         }
+    }
+
+    void SetupListeners()
+    {
+        closeButton.onClick.AddListener(() => quizCanvas.SetActive(false));
     }
 
     private void GenerateQuestion()
