@@ -45,20 +45,19 @@ public class QuizManager : MonoBehaviour
     // TODO: move this function to answerManager
     private void Update()
     {
-        if (isTimerOn)
+        if (!isTimerOn) return;
+        
+        if (timeLeft > 0)
         {
-            if (timeLeft > 0)
-            {
-                timeLeft -= Time.deltaTime;
-                answerText.text = $"{Mathf.CeilToInt(timeLeft)}";
-            }
-            else
-            {
-                isTimerOn = false;
-                timeLeft = _timeoutLength;
-                answerPanel.SetActive(false);
-                quizPanel.SetActive(true);
-            }
+            timeLeft -= Time.deltaTime;
+            answerText.text = $"{Mathf.CeilToInt(timeLeft)}";
+        }
+        else
+        {
+            isTimerOn = false;
+            timeLeft = _timeoutLength;
+            answerPanel.SetActive(false);
+            quizPanel.SetActive(true);
         }
     }
 
@@ -113,8 +112,6 @@ public class QuizManager : MonoBehaviour
         questions = new List<Question>();
 
         List<string> errors = new List<string>();
-        // TODO: check if answerIndex is between 0-3
-        // TODO: check if choices has 4 elements
         questions = JsonConvert.DeserializeObject<List<Question>>(json, new JsonSerializerSettings{
             Error = delegate(object sender, ErrorEventArgs args)
             {
@@ -127,6 +124,22 @@ public class QuizManager : MonoBehaviour
         if (errors.Any() || questions == null)
         {
             Debug.LogError(errors);
+            return;
+        }
+
+        var invalidIndex = questions.Any(q => q.answerIndex is < 0 or > 3);
+
+        if (invalidIndex)
+        {
+            Debug.LogError("JSON contains invalid index. Should be 0 <= x < 4");
+            return;
+        }
+        
+        var invalidChoices = questions.Any(q => q.choices.Length != 4);
+        
+        if (invalidChoices)
+        {
+            Debug.LogError("JSON contains invalid number of choices. Should be 4.");
             return;
         }
         
