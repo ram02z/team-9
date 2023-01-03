@@ -23,7 +23,7 @@ jobs:
 
       # Formatting
       - name: Check formatting
-        uses: xt0rted/dotnet-format@v1
+        uses: zyactions/dotnet-format@v1
         with:
           workspace: game/game.sln
           verify-no-changes: true
