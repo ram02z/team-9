@@ -21,6 +21,14 @@ jobs:
           restore-keys: |
             Library-
 
+      # Formatting
+      - name: Check formatting
+        uses: xt0rted/dotnet-format@v1
+        with:
+          workspace: game/game.sln
+          verify-no-changes: true
+          implicit-restore: true
+
       # Test
       - name: Run tests
         uses: game-ci/unity-test-runner@v2.0.0
