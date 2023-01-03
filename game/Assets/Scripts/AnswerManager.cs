@@ -5,10 +5,14 @@ using UnityEngine;
 
 public class AnswerManager : MonoBehaviour
 {
-    public bool isCorrect = false;
+    public bool isCorrect;
     public QuizManager quizManager;
     private System.Random _rnd;
 
+    /// <summary>
+    /// Handles the behaviour post answer
+    /// Called by Unity on click.
+    /// </summary>
     public void Answer()
     {
         if (isCorrect)

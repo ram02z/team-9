@@ -29,19 +29,33 @@ public class QuizManager : MonoBehaviour
     private readonly int _noCodes = 4;
     private readonly float _timeoutLength = 10;
 
+    /// <summary>
+    /// Initialise the quiz manager
+    /// </summary>
     private void Start()
     {
         _rnd = new System.Random();
+        
+        // Initialise timer variables
         timeLeft = _timeoutLength;
         isTimerOn = false;
+        
+        // Create N 4 digit codes
         codes = Enumerable.Range(1000, 9000).OrderBy(x => _rnd.Next()).Take(_noCodes).ToList();
+        
+        // Load questions from JSON file
         using StreamReader r = new StreamReader("questions.json");
         string json = r.ReadToEnd();
+        
+        // Initialise quiz
         LoadQuestions(json);
         GenerateQuestion();
         SetupListeners();
     }
 
+    /// <summary>
+    /// Update the timer if active
+    /// </summary>
     // TODO: move this function to answerManager
     private void Update()
     {
@@ -61,11 +75,17 @@ public class QuizManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Move to the next question
+    /// </summary>
     public void Correct()
     {
         GenerateQuestion();
     }
 
+    /// <summary>
+    /// Set answers to GameObjects
+    /// </summary>
     void SetAnswers()
     {
         for (int i = 0; i < options.Length; i++)
@@ -81,6 +101,9 @@ public class QuizManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Setup event listeners
+    /// </summary>
     void SetupListeners()
     {
         closeButton.onClick.AddListener(() =>
@@ -91,6 +114,9 @@ public class QuizManager : MonoBehaviour
         });
     }
 
+    /// <summary>
+    /// Generate new question if new question exists
+    /// </summary>
     private void GenerateQuestion()
     {
         if (questions.Count > 0)
@@ -107,6 +133,10 @@ public class QuizManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Load questions from JSON string and log any validation errors
+    /// </summary>
+    /// <param name="json">JSON string</param>
     private void LoadQuestions(string json)
     {
         questions = new List<Question>();
