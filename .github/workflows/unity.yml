@@ -25,7 +25,8 @@ jobs:
       - name: Check formatting
         uses: zyactions/dotnet-format@v1
         with:
-          workspace: game
+          include: |
+            game/Assets/Scripts
           verify-no-changes: true
           implicit-restore: true
 
