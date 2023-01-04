@@ -1,18 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-//A script that peforms an action when an interaction happens
+//A script that preforms an action when an interaction happens
 public class Question_Interactor : MonoBehaviour, I_Interactable
 {
 
-    [SerializeField] private string _promt;
-    public string InteractionPrompt => _promt;
+    [SerializeField] private string _prompt;
+    public string InteractionPrompt => _prompt;
+    public GameObject quizCanvas;
+    public ThirdPersonMovement thirdPersonMovement;
 
     public bool Interact(Interactor interactor)
     {
-        //TODO: Implement question to open
-        Debug.Log("Opening question");
+        quizCanvas.SetActive(true);
+        thirdPersonMovement.LockPositionAndCamera();
         return true;
     }
 }

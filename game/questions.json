@@ -1,0 +1,22 @@
+﻿[
+  {
+  "utterance": "Find the sum of 111 + 222 + 333",
+  "choices": ["700", "666", "10", "100"],
+  "answerIndex": 1
+  },
+  {
+    "utterance": "Find the product of 72 x 3",
+    "choices": ["216", "7230", "106", "372"],
+    "answerIndex": 0 
+  },
+  {
+    "utterance": "Simplify: 26 + 32 - 12",
+    "choices": ["0", "32", "56", "46"],
+    "answerIndex": 3
+  },
+  {
+    "utterance": "Solve: 24 + 4 ÷ 4",
+    "choices": ["25", "6", "28", "7"],
+    "answerIndex": 0
+  }
+]
