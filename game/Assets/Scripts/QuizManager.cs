@@ -23,6 +23,7 @@ public class QuizManager : MonoBehaviour
     public GameObject quizPanel;
     public GameObject answerPanel;
     public Button closeButton;
+    public ThirdPersonMovement thirdPersonMovement;
     private System.Random _rnd;
 
     private readonly int _noQuestions = 3;
@@ -35,18 +36,18 @@ public class QuizManager : MonoBehaviour
     private void Start()
     {
         _rnd = new System.Random();
-        
+
         // Initialise timer variables
         timeLeft = _timeoutLength;
         isTimerOn = false;
-        
+
         // Create N 4 digit codes
         codes = Enumerable.Range(1000, 9000).OrderBy(x => _rnd.Next()).Take(_noCodes).ToList();
-        
+
         // Load questions from JSON file
         using StreamReader r = new StreamReader("questions.json");
         string json = r.ReadToEnd();
-        
+
         // Initialise quiz
         LoadQuestions(json);
         GenerateQuestion();
@@ -60,7 +61,7 @@ public class QuizManager : MonoBehaviour
     private void Update()
     {
         if (!isTimerOn) return;
-        
+
         if (timeLeft > 0)
         {
             timeLeft -= Time.deltaTime;
@@ -109,8 +110,7 @@ public class QuizManager : MonoBehaviour
         closeButton.onClick.AddListener(() =>
         {
             quizCanvas.SetActive(false);
-            answerPanel.SetActive(false);
-            quizPanel.SetActive(true);
+            thirdPersonMovement.UnlockPositionAndCamera();
         });
     }
 
@@ -164,15 +164,15 @@ public class QuizManager : MonoBehaviour
             Debug.LogError("JSON contains invalid index. Should be 0 <= x < 4");
             return;
         }
-        
+
         var invalidChoices = questions.Any(q => q.choices.Length != 4);
-        
+
         if (invalidChoices)
         {
             Debug.LogError("JSON contains invalid number of choices. Should be 4.");
             return;
         }
-        
+
         questions = questions.OrderBy(x => _rnd.Next()).Take(_noQuestions).ToList();
     }
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThirdPersonMovment : MonoBehaviour
+public class ThirdPersonMovement : MonoBehaviour
 {
     //References to the controller moving the player and the main camera
     public CharacterController CharController;
@@ -14,16 +14,21 @@ public class ThirdPersonMovment : MonoBehaviour
     //How quickly the camera turns when using it to rotate player
     public float TurnTime = 0.1f;
     float TurnVelocity;
+    private bool _isPositionLocked = false;
 
 
     void Start()
     {
         //Locks cursor to middle of screen and hides it from view
-        Cursor.lockState = CursorLockMode.None;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
     {
+        if (_isPositionLocked)
+        {
+            return;
+        }
         //Gets input from mouse
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -43,5 +48,17 @@ public class ThirdPersonMovment : MonoBehaviour
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             CharController.Move(moveDir * Speed * Time.deltaTime);
         }
+    }
+
+    public void LockPositionAndCamera()
+    {
+        _isPositionLocked = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    public void UnlockPositionAndCamera()
+    {
+        _isPositionLocked = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }
