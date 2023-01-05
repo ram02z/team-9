@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -42,7 +41,7 @@ public class QuizManager : MonoBehaviour
         isTimerOn = false;
 
         // Create N 4 digit codes
-        codes = Enumerable.Range(1000, 9000).OrderBy(x => _rnd.Next()).Take(_noCodes).ToList();
+        codes = Enumerable.Range(1000, 9000).OrderBy(_ => _rnd.Next()).Take(_noCodes).ToList();
 
         // Load questions from JSON file
         using StreamReader r = new StreamReader("questions.json");
@@ -173,6 +172,6 @@ public class QuizManager : MonoBehaviour
             return;
         }
 
-        questions = questions.OrderBy(x => _rnd.Next()).Take(_noQuestions).ToList();
+        questions = questions.OrderBy(_ => _rnd.Next()).Take(_noQuestions).ToList();
     }
 }
