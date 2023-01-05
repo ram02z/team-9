@@ -31,7 +31,6 @@ jobs:
         with:
           projectPath: game
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          testMode: PlayMode
 
       # Build
       - name: Build project
