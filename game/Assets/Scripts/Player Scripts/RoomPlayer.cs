@@ -42,7 +42,6 @@ public class RoomPlayer : NetworkRoomPlayer
     [SyncVar(hook = nameof(PlayerDataChanged))]
     public ushort playerData = 0;
 
-    [SyncVar(hook = nameof(hookReadyStateChanged))]
     public bool isReady = false;
 
     // This is called by the hook of playerNumber SyncVar above
@@ -63,13 +62,13 @@ public class RoomPlayer : NetworkRoomPlayer
         OnPlayerDataChanged?.Invoke(newPlayerData);
     }
 
-    void hookReadyStateChanged(bool _, bool isReady)
-    {
-        OnReadyStateChanged.Invoke(isReady);
-    }
 
     public void isReadyClick() {
         isReady = !isReady;
+        if(NetworkClient.active && isLocalPlayer) {
+            CmdChangeReadyState(isReady);
+            // Debug.Log("hello");
+        }
     }
     #endregion
 
@@ -137,6 +136,7 @@ public class RoomPlayer : NetworkRoomPlayer
         // Instantiate the player UI as child of the Players Panel
         playerUIObject = Instantiate(playerUIPrefab, CanvasUI.GetPlayersPanel());
         playerUI = playerUIObject.GetComponent<PlayerUI>();
+        OnStartLocalPlayer();
 
         // wire up all events to handlers in PlayerUI
         OnPlayerNumberChanged = playerUI.OnPlayerNumberChanged;
