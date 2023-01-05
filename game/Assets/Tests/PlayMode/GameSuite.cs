@@ -9,7 +9,7 @@ using UnityEngine.InputSystem.Controls;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
-namespace Tests
+namespace Tests.PlayMode
 {
 
     public class GameSuite : InputTestFixture
