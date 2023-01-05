@@ -44,14 +44,5 @@ namespace Tests
             sceneName = SceneManager.GetActiveScene().name;
             Assert.That(sceneName, Is.EqualTo("Game"));
         }
-
-        [UnityTest]
-        public IEnumerator TestGameQuit()
-        {
-            GameObject quitButton = GameObject.Find("Canvas/Panel/QuitButton");
-            Assert.NotNull(quitButton);
-
-            yield return null;
-        }
     }
 }

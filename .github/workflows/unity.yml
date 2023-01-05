@@ -2,38 +2,133 @@ name: Unity
 
 on: [push]
 
-jobs:
-  build:
-    name: Build game
-    runs-on: ubuntu-latest
-    steps:
-      # Checkout
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          lfs: true
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
-      # Cache
-      - uses: actions/cache@v2
+jobs:
+  test:
+    name: Unity tests workflow
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        unityVersion:
+          - 2022.2.1f1
+        testMode:
+          - playmode
+          - editmode
+
+    steps:
+
+      # This destroys 2GB free quota within a day
+      #      - uses: actions/checkout@v2
+      #        with:
+      #          lfs: true
+
+      # Workaround: https://github.com/actions/checkout/issues/165#issuecomment-657673315
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create LFS file list
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS cache
+        uses: actions/cache@v2
+        id: lfs-cache
+        with:
+          path: .git/lfs
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+
+      - name: Git LFS Pull
+        run: |
+          git lfs pull
+          git add .
+          git reset --hard
+      - name: Restore Library cache
+        uses: actions/cache@v2
+        id: lib-cache
         with:
           path: game/Library
-          key: Library-${{ hashFiles('game/Assets/**', 'game/Packages/**', 'game/ProjectSettings/**') }}
+          key: Library-Test
           restore-keys: |
             Library-
 
       # Test
       - name: Run tests
-        uses: game-ci/unity-test-runner@v2.0.0
+        uses: game-ci/unity-test-runner@v2
+        id: tests
         env:
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
+          unityVersion: ${{ matrix.unityVersion }}
+          testMode: ${{ matrix.testMode }}
           projectPath: game
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          testMode: PlayMode
+          artifactsPath: ${{ matrix.testMode }}-artifacts
+          checkName: ${{ matrix.testMode }} Test Results
+          coverageOptions: 'generateAdditionalMetrics;generateHtmlReport;generateBadgeReport;assemblyFilters:+my.assembly.*'
 
-      # Build
+      # Upload results
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Test results for ${{ matrix.testMode }}
+          path: ${{ steps.tests.outputs.artifactsPath }}
+      - uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: Coverage results for ${{ matrix.testMode }}
+          path: ${{ steps.tests.outputs.coveragePath }}
+
+  build:
+    name: Unity build workflow
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - StandaloneWindows64
+    steps:
+      # This destroys 2GB free quota within a day
+      #      - uses: actions/checkout@v2
+      #        with:
+      #          lfs: true
+
+      # Workaround: https://github.com/actions/checkout/issues/165#issuecomment-657673315
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create LFS file list
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS cache
+        uses: actions/cache@v2
+        id: lfs-cache
+        with:
+          path: .git/lfs
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+
+      - name: Git LFS Pull
+        run: |
+          git lfs pull
+          git add .
+          git reset --hard
+
+      - name: Restore Library cache
+        uses: actions/cache@v2
+        id: lib-cache
+        with:
+          path: game/Library
+          key: Library-Build-${{ matrix.targetPlatform }}
+          restore-keys: |
+            Library-Build-
+            Library-
+
       - name: Build project
         uses: game-ci/unity-builder@v2
         env:
@@ -41,13 +136,12 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
-          targetPlatform: StandaloneWindows64
           projectPath: game
-          # Git LFS reverted migration is causing the build to be flagged as dirty
-          allowDirtyBuild: true
+          targetPlatform: ${{ matrix.targetPlatform }}
 
-      # Output
-      - uses: actions/upload-artifact@v2
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
         with:
-          name: Build
-          path: build
+          name: Build (${{ matrix.targetPlatform }})
+          path: build/${{ matrix.targetPlatform }}
+
