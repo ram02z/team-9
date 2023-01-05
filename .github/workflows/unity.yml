@@ -29,6 +29,7 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
+          unityVersion: "2022.2.1f1"
           projectPath: game
           githubToken: ${{ secrets.GITHUB_TOKEN }}
 
