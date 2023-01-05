@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -36,6 +37,11 @@ public class MenuManager : MonoBehaviour
     void QuitGame()
     {
         // Quit the application when the quit button is clicked
-        Application.Quit();
+        #if UNITY_STANDALONE
+                Application.Quit();
+        #endif
+        #if UNITY_EDITOR
+                EditorApplication.isPlaying = false;
+        #endif
     }
 }
