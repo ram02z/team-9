@@ -54,5 +54,7 @@
       ]
     }
   ],
-  "testables": ["com.unity.inputsystem"]
+  "testables": [
+    "com.unity.inputsystem"
+  ]
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using Mirror;
+using System;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-room-manager
@@ -19,6 +20,8 @@ using Mirror;
 public class RoomManager : NetworkRoomManager
 {
     #region Server Callbacks
+    
+    public static event Action<NetworkConnection> OnServerPlayerAdded;
 
     /// <summary>
     /// This is called on the server when the server is started - including when a host is started.
@@ -112,6 +115,7 @@ public class RoomManager : NetworkRoomManager
     public override void OnRoomServerPlayersReady()
     {
         base.OnRoomServerPlayersReady();
+
     }
 
     /// <summary>

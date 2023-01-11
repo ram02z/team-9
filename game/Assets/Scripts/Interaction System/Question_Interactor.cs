@@ -10,12 +10,11 @@ public class Question_Interactor : MonoBehaviour, I_Interactable
     [SerializeField] private string _prompt;
     public string InteractionPrompt => _prompt;
     public GameObject quizCanvas;
-    public ThirdPersonMovement thirdPersonMovement;
 
     public bool Interact(Interactor interactor)
     {
         quizCanvas.SetActive(true);
-        thirdPersonMovement.LockPositionAndCamera();
+        // TODO: lock position and camera
         return true;
     }
 }
