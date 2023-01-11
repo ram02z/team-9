@@ -28,7 +28,7 @@ public class MenuManager : MonoBehaviour
     void StartGame()
     {
         // Load the game scene when the start button is clicked
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("Scenes/Offline");
     }
 
     /// <summary>

@@ -7,7 +7,7 @@ using UnityEngine.TestTools;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-namespace Tests
+namespace Tests.PlayMode
 {
 
     public class MenuSuite : InputTestFixture
@@ -31,7 +31,7 @@ namespace Tests
 
 
         [UnityTest]
-        public IEnumerator TestGameStart()
+        public IEnumerator TestOfflineLobbyStart()
         {
             GameObject startButton = GameObject.Find("Canvas/Panel/StartButton");
             string sceneName = SceneManager.GetActiveScene().name;
@@ -42,7 +42,7 @@ namespace Tests
             yield return new WaitForSeconds(2f);
 
             sceneName = SceneManager.GetActiveScene().name;
-            Assert.That(sceneName, Is.EqualTo("Game"));
+            Assert.That(sceneName, Is.EqualTo("Offline"));
         }
     }
 }

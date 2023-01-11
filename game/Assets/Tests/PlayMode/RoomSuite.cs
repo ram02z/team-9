@@ -1,0 +1,44 @@
+﻿using System.Collections;
+using NUnit.Framework;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
+
+namespace Tests.PlayMode
+{
+    public class RoomSuite : InputTestFixture
+    {
+        private Mouse _mouse;
+
+        public override void Setup()
+        {
+            base.Setup();
+            SceneManager.LoadScene("Scenes/Room");
+            _mouse = InputSystem.AddDevice<Mouse>();
+        }
+
+        private void ClickUI(GameObject gameObject)
+        {
+            Camera camera = GameObject.Find("Main Camera").GetComponent<Camera>();
+            Vector3 screenPos = camera.WorldToScreenPoint(gameObject.transform.position);
+            Set(_mouse.position, screenPos);
+            Click(_mouse.leftButton);
+        }
+
+        [UnityTest]
+        public IEnumerator TestBackButton()
+        {
+            GameObject backButton = GameObject.Find("Canvas/Panel/BackButton");
+            string sceneName = SceneManager.GetActiveScene().name;
+            Assert.That(sceneName, Is.EqualTo("Room"));
+
+            ClickUI(backButton);
+            // Use yield to skip a frame.
+            yield return new WaitForSeconds(2f);
+
+            sceneName = SceneManager.GetActiveScene().name;
+            Assert.That(sceneName, Is.EqualTo("Offline"));
+        }
+    }
+}

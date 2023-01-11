@@ -22,6 +22,9 @@ namespace Tests.EditMode
         {
             Camera mainCamera = GameObject.Find("Main Camera").GetComponent<Camera>();
             Assert.NotNull(mainCamera);
+            Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+            Assert.AreEqual(canvas.renderMode, RenderMode.ScreenSpaceCamera);
+            Assert.AreEqual(canvas.worldCamera,mainCamera);
         }
 
         [Test]
