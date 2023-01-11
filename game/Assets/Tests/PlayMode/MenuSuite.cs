@@ -14,10 +14,11 @@ namespace Tests.PlayMode
     {
         private Mouse _mouse;
 
+        [SetUp]
         public override void Setup()
         {
+            SceneManager.LoadScene("Scenes/Menu", LoadSceneMode.Single);
             base.Setup();
-            SceneManager.LoadScene("Scenes/Menu");
             _mouse = InputSystem.AddDevice<Mouse>();
         }
 
@@ -43,6 +44,12 @@ namespace Tests.PlayMode
 
             sceneName = SceneManager.GetActiveScene().name;
             Assert.That(sceneName, Is.EqualTo("Offline"));
+        }
+
+        [TearDown]
+        public override void TearDown()
+        {
+            base.TearDown();
         }
     }
 }
