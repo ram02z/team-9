@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
+using TMPro;
 
 public class RoomPlayer : NetworkRoomPlayer
 {
@@ -9,7 +11,9 @@ public class RoomPlayer : NetworkRoomPlayer
     public event System.Action<byte> OnPlayerNumberChanged;
     public event System.Action<Color32> OnPlayerColorChanged;
     public event System.Action<ushort> OnPlayerDataChanged;
-    public event System.Action<bool> OnReadyStateChanged;
+
+    private Button readyButton;
+    private TextMeshProUGUI readyButtonText;
 
     // Players List to manage playerNumber
     static readonly List<RoomPlayer> playersList = new List<RoomPlayer>();
@@ -63,13 +67,6 @@ public class RoomPlayer : NetworkRoomPlayer
     }
 
 
-    public void isReadyClick() {
-        isReady = !isReady;
-        if(NetworkClient.active && isLocalPlayer) {
-            CmdChangeReadyState(isReady);
-            // Debug.Log("hello");
-        }
-    }
     #endregion
 
     #region Server
@@ -113,6 +110,27 @@ public class RoomPlayer : NetworkRoomPlayer
         playerData = (ushort)Random.Range(100, 1000);
     }
 
+    public void isReadyClicked() {
+        isReady = !isReady;
+        Debug.Log("isReady = " + isReady);
+
+        if(isReady) {
+            if(isLocalPlayer) {
+                CmdChangeReadyState(true);
+                Debug.Log("True");
+                readyButtonText.text = "Cancel";
+            }
+        }
+        else{
+            if(isLocalPlayer) {
+                CmdChangeReadyState(false);
+                Debug.Log("False");
+                readyButtonText.text = "Ready Up";
+            }
+        }    
+    }
+
+
     /// <summary>
     /// Invoked on the server when the object is unspawned
     /// <para>Useful for saving object data in persistent storage</para>
@@ -138,17 +156,19 @@ public class RoomPlayer : NetworkRoomPlayer
         playerUI = playerUIObject.GetComponent<PlayerUI>();
         OnStartLocalPlayer();
 
+        readyButton = playerUI.getReadyBtn();
+        readyButtonText = playerUI.getReadyBtnText();
+        readyButton.onClick.AddListener(isReadyClicked);
+
         // wire up all events to handlers in PlayerUI
         OnPlayerNumberChanged = playerUI.OnPlayerNumberChanged;
         OnPlayerColorChanged = playerUI.OnPlayerColorChanged;
         OnPlayerDataChanged = playerUI.OnPlayerDataChanged;
-        OnReadyStateChanged = playerUI.onReadyChange;
 
         // Invoke all event handlers with the initial data from spawn payload
         OnPlayerNumberChanged.Invoke(playerNumber);
         OnPlayerColorChanged.Invoke(playerColor);
         OnPlayerDataChanged.Invoke(playerData);
-        OnReadyStateChanged.Invoke(false);
     }
 
     /// <summary>
@@ -184,7 +204,6 @@ public class RoomPlayer : NetworkRoomPlayer
         OnPlayerNumberChanged = null;
         OnPlayerColorChanged = null;
         OnPlayerDataChanged = null;
-        OnReadyStateChanged = null;
 
         // Remove this player's UI object
         Destroy(playerUIObject);

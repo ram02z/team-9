@@ -11,6 +11,7 @@ public class PlayerUI : MonoBehaviour
     public Text playerNameText;
     public Text playerDataText;
 
+    public Button readyUpButton;
     [SerializeField] private TextMeshProUGUI ReadyBtnText;
 
     // Sets a highlight color for the local player
@@ -18,6 +19,14 @@ public class PlayerUI : MonoBehaviour
     {
         // add a visual background for the local player in the UI
         image.color = new Color(1f, 1f, 1f, 0.1f);
+    }
+
+    public Button getReadyBtn() {
+        return readyUpButton;
+    }
+
+    public TextMeshProUGUI getReadyBtnText() {
+        return ReadyBtnText;
     }
 
     // This value can change as clients leave and join
