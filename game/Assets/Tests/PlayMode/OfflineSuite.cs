@@ -1,23 +1,20 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.TestTools;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.TestTools;
 
 namespace Tests.PlayMode
 {
-
-    public class MenuSuite : InputTestFixture
+    public class OfflineSuite : InputTestFixture
     {
         private Mouse _mouse;
 
         public override void Setup()
         {
             base.Setup();
-            SceneManager.LoadScene("Scenes/Menu");
+            SceneManager.LoadScene("Scenes/Offline");
             _mouse = InputSystem.AddDevice<Mouse>();
         }
 
@@ -29,20 +26,19 @@ namespace Tests.PlayMode
             Click(_mouse.leftButton);
         }
 
-
         [UnityTest]
-        public IEnumerator TestOfflineLobbyStart()
+        public IEnumerator TestBackButton()
         {
-            GameObject startButton = GameObject.Find("Canvas/Panel/StartButton");
+            GameObject backButton = GameObject.Find("Canvas/Panel/BackButton");
             string sceneName = SceneManager.GetActiveScene().name;
-            Assert.That(sceneName, Is.EqualTo("Menu"));
+            Assert.That(sceneName, Is.EqualTo("Offline"));
 
-            ClickUI(startButton);
+            ClickUI(backButton);
             // Use yield to skip a frame.
             yield return new WaitForSeconds(2f);
 
             sceneName = SceneManager.GetActiveScene().name;
-            Assert.That(sceneName, Is.EqualTo("Offline"));
+            Assert.That(sceneName, Is.EqualTo("Menu"));
         }
     }
 }

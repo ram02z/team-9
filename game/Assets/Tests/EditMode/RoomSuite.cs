@@ -1,20 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
-using UnityEngine.TestTools;
 
 namespace Tests.EditMode
 {
-    public class MenuSuite
+    public class RoomSuite
     {
         [SetUp]
         public void Setup()
         {
-            EditorSceneManager.OpenScene($"{Application.dataPath}/Scenes/Menu.unity");
+            EditorSceneManager.OpenScene($"{Application.dataPath}/Scenes/Room.unity");
         }
 
         [Test]
@@ -30,10 +27,8 @@ namespace Tests.EditMode
         [Test]
         public void TestMenuButtons()
         {
-            GameObject startButton = GameObject.Find("Canvas/Panel/StartButton");
-            Assert.NotNull(startButton);
-            GameObject quitButton = GameObject.Find("Canvas/Panel/QuitButton");
-            Assert.NotNull(quitButton);
+            GameObject backButton = GameObject.Find("Canvas/Panel/BackButton");
+            Assert.NotNull(backButton);
         }
 
         [Test]
