@@ -42,7 +42,7 @@ namespace Tests
             yield return new WaitForSeconds(2f);
 
             sceneName = SceneManager.GetActiveScene().name;
-            Assert.That(sceneName, Is.EqualTo("Game"));
+            Assert.That(sceneName, Is.EqualTo("Offline"));
         }
     }
 }
