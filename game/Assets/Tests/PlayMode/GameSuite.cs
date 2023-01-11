@@ -15,13 +15,11 @@ namespace Tests.PlayMode
     public class GameSuite : InputTestFixture
     {
 
-        private Keyboard _keyboard;
-        private Mouse _mouse;
-
+        [SetUp]
         public override void Setup()
         {
-            SceneManager.LoadScene("Scenes/Game");
-            _keyboard = InputSystem.AddDevice<Keyboard>();
+            SceneManager.LoadScene("Scenes/Game", LoadSceneMode.Single);
+            base.Setup();
         }
 
         [UnityTest]
@@ -33,20 +31,26 @@ namespace Tests.PlayMode
             yield return null;
         }
 
-    //     [UnityTest]
-    //     public IEnumerator TestInteraction()
-    //     {
-    //         GameObject player = GameObject.Find("TmpCharacter");
-    //
-    //         GameObject interactionCube = GameObject.Find("Interaction Cube");
-    //         Vector3 cubePosition = interactionCube.transform.position;
-    //         cubePosition.z -= 1;
-    //
-    //         player.transform.position = cubePosition;
-    //         PressAndRelease(_keyboard.eKey);
-    //         InputSystem.Update();
-    //         yield return new WaitForEndOfFrame();
-    //         // TODO: test quiz canvas
-    //     }
+        //     [UnityTest]
+        //     public IEnumerator TestInteraction()
+        //     {
+        //         GameObject player = GameObject.Find("TmpCharacter");
+        //
+        //         GameObject interactionCube = GameObject.Find("Interaction Cube");
+        //         Vector3 cubePosition = interactionCube.transform.position;
+        //         cubePosition.z -= 1;
+        //
+        //         player.transform.position = cubePosition;
+        //         PressAndRelease(_keyboard.eKey);
+        //         InputSystem.Update();
+        //         yield return new WaitForEndOfFrame();
+        //         // TODO: test quiz canvas
+        //     }
+
+        [TearDown]
+        public override void TearDown()
+        {
+            base.TearDown();
+        }
     }
 }
