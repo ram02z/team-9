@@ -210,7 +210,6 @@ GameObject:
   - component: {fileID: -5255227701871369585}
   - component: {fileID: 2953655854084233964}
   - component: {fileID: 2953655854084233969}
-  - component: {fileID: 2953655854084233966}
   - component: {fileID: 8416004291718741261}
   m_Layer: 0
   m_Name: TmpCharacter
@@ -321,22 +320,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &2953655854084233966
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2953655854084233962}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79045b2dcebccb1428f4400608e328d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CharController: {fileID: 0}
-  MainCamera: {fileID: 0}
-  Speed: 4
-  TurnTime: 0.1
 --- !u!114 &8416004291718741261
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,7 +327,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2953655854084233962}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b387d52e3f4113448a56be91c4c86579, type: 3}
   m_Name: 

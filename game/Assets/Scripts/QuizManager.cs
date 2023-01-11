@@ -22,7 +22,6 @@ public class QuizManager : MonoBehaviour
     public GameObject quizPanel;
     public GameObject answerPanel;
     public Button closeButton;
-    public ThirdPersonMovement thirdPersonMovement;
     private System.Random _rnd;
 
     private readonly int _noQuestions = 3;
@@ -109,7 +108,7 @@ public class QuizManager : MonoBehaviour
         closeButton.onClick.AddListener(() =>
         {
             quizCanvas.SetActive(false);
-            thirdPersonMovement.UnlockPositionAndCamera();
+            // TODO: lock position and camera
         });
     }
 
