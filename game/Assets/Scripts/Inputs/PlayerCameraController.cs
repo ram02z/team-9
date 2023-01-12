@@ -36,7 +36,7 @@ public class PlayerCameraController : NetworkBehaviour
         enabled = true;
 
         controls.Player.Look.performed += ctx => Look(ctx.ReadValue<Vector2>());
-        controls.Player.Questions.performed += ctx => SetCanMove();
+        // controls.Player.Questions.performed += ctx => SetCanMove();
     }
 
     public void SetCanMove() => canMove = !canMove;

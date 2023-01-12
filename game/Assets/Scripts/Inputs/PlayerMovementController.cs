@@ -29,7 +29,7 @@ public class PlayerMovementController : NetworkBehaviour
 
       Controls.Player.Move.performed += ctx => SetMovement(ctx.ReadValue<Vector2>());
       Controls.Player.Move.canceled += ctx => ResetMovement();
-      Controls.Player.Questions.performed += ctx => SetCanMove();
+      // Controls.Player.Questions.performed += ctx => SetCanMove();
     }
 
 
