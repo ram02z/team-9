@@ -14,8 +14,8 @@ public class PlayerCameraController : NetworkBehaviour
     [SerializeField] private Transform playerTransform = null;
     [SerializeField] private CinemachineVirtualCamera virtualCamera = null;
 
-    private bool canMove = true;
-    
+    private bool _canMove = true;
+
     private Controls controls;
     private Controls Controls {
         get
@@ -39,7 +39,7 @@ public class PlayerCameraController : NetworkBehaviour
         // controls.Player.Questions.performed += ctx => SetCanMove();
     }
 
-    public void SetCanMove() => canMove = !canMove;
+    public void SetCanMove(bool canMove) => _canMove = canMove;
 
     [ClientCallback]
     private void OnEnable() => Controls.Enable();
@@ -49,7 +49,7 @@ public class PlayerCameraController : NetworkBehaviour
     private void Look(Vector2 lookAxis) {
         float deltaTime = Time.deltaTime;
 
-        if(canMove) { 
+        if(_canMove) {
             cameraVelocity.y = CAMERA_VELOCITY_Y;
             cameraVelocity.x = CAMERA_VELOCITY_X;
         } else {
@@ -64,5 +64,5 @@ public class PlayerCameraController : NetworkBehaviour
 
         playerTransform.Rotate(0f, lookAxis.x * cameraVelocity.x * deltaTime, 0f);
     }
-    
+
 }

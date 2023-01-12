@@ -46,7 +46,6 @@ public class QuizManager : MonoBehaviour
         // Initialise quiz
         LoadQuestions(json);
         AttachQuestionsToInteractables();
-        SetupListeners();
     }
 
     private void AttachQuestionsToInteractables()
@@ -60,18 +59,6 @@ public class QuizManager : MonoBehaviour
             interactable.GetComponent<Question_Interactor>().Code = codes[0];
             codes.RemoveAt(0);
         }
-    }
-
-    /// <summary>
-    /// Setup event listeners
-    /// </summary>
-    void SetupListeners()
-    {
-        closeButton.onClick.AddListener(() =>
-        {
-            quizCanvas.SetActive(false);
-            // TODO: unlock position and camera
-        });
     }
 
     /// <summary>

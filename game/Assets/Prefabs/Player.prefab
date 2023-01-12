@@ -1020,6 +1020,7 @@ GameObject:
   - component: {fileID: 4194640302157256722}
   - component: {fileID: 9062407376217895104}
   - component: {fileID: 7271607461667479783}
+  - component: {fileID: -7952803771943071836}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1079,7 +1080,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   target: {fileID: 4378856989800782324}
-  clientAuthority: 1
+  clientAuthority: 0
   syncPosition: 1
   syncRotation: 1
   syncScale: 0
@@ -1234,12 +1235,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99223de0810f5ee4f9c064060ea38d4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
   _interactionPoint: {fileID: 263526718813625624}
   _interactionPointRadius: 0.5
   _interactionMask:
     serializedVersion: 2
     m_Bits: 64
   _numFound: 0
+--- !u!114 &-7952803771943071836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4003422545091986254}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16796313d4214b73bd10a07c1ee08880, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  index: 0
+  score: 0
 --- !u!1 &4084918830717381939
 GameObject:
   m_ObjectHideFlags: 0

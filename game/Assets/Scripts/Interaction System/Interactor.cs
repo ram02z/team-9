@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 //Script that gets the interaction object, sets a radius of size and detects colliders
 //When an interaction ocuurs an action is performed
-public class Interactor : MonoBehaviour
+public class Interactor : NetworkBehaviour
 {
     //Gets position on interaction point
     [SerializeField] private Transform _interactionPoint;
@@ -19,9 +20,8 @@ public class Interactor : MonoBehaviour
     private readonly Collider[] _colliders = new Collider[3];
     //(For testing purpouses) Displays the number of interactable objects colliding with the interaction point
     [SerializeField] private int _numFound;
-    private I_Interactable _interactable;
 
-    
+
 
     private void Update()
     {
@@ -31,7 +31,7 @@ public class Interactor : MonoBehaviour
         //If an object is found
         if (_numFound > 0)
         {
-            // Will get the nearest (first registered) object 
+            // Will get the nearest (first registered) object
             var interactable = _colliders[0].GetComponent<I_Interactable>();
             //If "e" key is pressed
             if (interactable != null && Input.GetKeyDown(KeyCode.E))

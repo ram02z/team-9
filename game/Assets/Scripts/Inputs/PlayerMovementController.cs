@@ -9,7 +9,7 @@ public class PlayerMovementController : NetworkBehaviour
     [SerializeField] private CharacterController controller = null;
     [SerializeField] private Animator animator = null;
 
-    private bool canMove = true;
+    private bool _canMove = true;
 
 
     private Vector2 previousInput;
@@ -41,13 +41,13 @@ public class PlayerMovementController : NetworkBehaviour
     private void Update() {
       if(!isOwned) {return;}
       Move();
-      animator.SetBool("isWalking", controller.velocity.magnitude > 0.2f); 
-    }  
+      animator.SetBool("isWalking", controller.velocity.magnitude > 0.2f);
+    }
 
     [Client]
     private void SetMovement(Vector2 movement) => previousInput = movement;
 
-    public void SetCanMove() => canMove = !canMove; 
+    public void SetCanMove(bool canMove) => _canMove = canMove;
 
     [Client]
     private void ResetMovement() => previousInput = Vector2.zero;
@@ -59,11 +59,11 @@ public class PlayerMovementController : NetworkBehaviour
         right.y = 0f;
         forward.y = 0f;
 
-        
+
 
         Vector3 movement = right.normalized * previousInput.x + forward.normalized * previousInput.y;
 
-        if(canMove) {
+        if(_canMove) {
           movementSpeed = 5f;
         } else {
           movementSpeed = 0f;

@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 
 //A script that preforms an action when an interaction happens
-public class Question_Interactor : MonoBehaviour, I_Interactable
+public class Question_Interactor : NetworkBehaviour, I_Interactable
 {
 
     [SerializeField] private string _prompt;
@@ -17,9 +18,12 @@ public class Question_Interactor : MonoBehaviour, I_Interactable
     public float timeLeft;
     public bool isCooldown;
     private readonly float _timeoutLength = 10;
+    private GamePlayer lastInteractor = null;
 
     public bool Interact(Interactor interactor)
     {
+        lastInteractor = interactor.GetComponent<GamePlayer>();
+        FreezeInteractor(interactor);
         quizManager.quizCanvas.SetActive(true);
         if (isCorrect)
         {
@@ -37,6 +41,21 @@ public class Question_Interactor : MonoBehaviour, I_Interactable
         }
         // TODO: lock position and camera
         return true;
+    }
+
+    private void FreezeInteractor(Interactor interactor)
+    {
+        var movementController = interactor.GetComponent<PlayerMovementController>();
+        var cameraController = interactor.GetComponent<PlayerCameraController>();
+        movementController.SetCanMove(false);
+        cameraController.SetCanMove(false);
+        quizManager.closeButton.onClick.AddListener(() =>
+        {
+            quizManager.quizCanvas.SetActive(false);
+            movementController.SetCanMove(true);
+            cameraController.SetCanMove(true);
+        });
+
     }
 
     private void ShowCodePanel()
@@ -61,6 +80,7 @@ public class Question_Interactor : MonoBehaviour, I_Interactable
     /// </summary>
     public void Correct()
     {
+        lastInteractor.score += 1;
         isCorrect = true;
         quizManager.codeText.text = $"The code is {Code}";
         ShowCodePanel();
