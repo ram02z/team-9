@@ -47,9 +47,7 @@ public class PlayerMovementController : NetworkBehaviour
     [Client]
     private void SetMovement(Vector2 movement) => previousInput = movement;
 
-    private void SetCanMove() {
-      canMove = !canMove;
-    }
+    public void SetCanMove() => canMove = !canMove; 
 
     [Client]
     private void ResetMovement() => previousInput = Vector2.zero;
