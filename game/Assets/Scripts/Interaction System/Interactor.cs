@@ -25,6 +25,7 @@ public class Interactor : NetworkBehaviour
 
     private void Update()
     {
+        if (!isLocalPlayer) return;
         //Gets the number of interactable objects colliding with the interaction point
         _numFound = Physics.OverlapSphereNonAlloc(_interactionPoint.position, _interactionPointRadius, _colliders,
             _interactionMask);
