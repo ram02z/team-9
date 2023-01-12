@@ -9,6 +9,8 @@ public class PlayerMovementController : NetworkBehaviour
     [SerializeField] private CharacterController controller = null;
     [SerializeField] private Animator animator = null;
 
+    private bool canMove = true;
+
 
     private Vector2 previousInput;
 
@@ -21,13 +23,14 @@ public class PlayerMovementController : NetworkBehaviour
         }
     }
 
-  public override void OnStartAuthority()
-  {
-    enabled = true;
+    public override void OnStartAuthority()
+    {
+      enabled = true;
 
-    Controls.Player.Move.performed += ctx => SetMovement(ctx.ReadValue<Vector2>());
-    Controls.Player.Move.canceled += ctx => ResetMovement();
-  }
+      Controls.Player.Move.performed += ctx => SetMovement(ctx.ReadValue<Vector2>());
+      Controls.Player.Move.canceled += ctx => ResetMovement();
+      Controls.Player.Questions.performed += ctx => SetCanMove();
+    }
 
 
     [ClientCallback]
@@ -38,15 +41,18 @@ public class PlayerMovementController : NetworkBehaviour
     private void Update() {
       if(!isOwned) {return;}
       Move();
-      animator.SetBool("isWalking", controller.velocity.magnitude > 0.2f);
+      animator.SetBool("isWalking", controller.velocity.magnitude > 0.2f); 
     }  
 
     [Client]
     private void SetMovement(Vector2 movement) => previousInput = movement;
 
+    private void SetCanMove() {
+      canMove = !canMove;
+    }
+
     [Client]
     private void ResetMovement() => previousInput = Vector2.zero;
-
 
     [Client]
     private void Move() {
@@ -55,8 +61,15 @@ public class PlayerMovementController : NetworkBehaviour
         right.y = 0f;
         forward.y = 0f;
 
+        
+
         Vector3 movement = right.normalized * previousInput.x + forward.normalized * previousInput.y;
 
+        if(canMove) {
+          movementSpeed = 5f;
+        } else {
+          movementSpeed = 0f;
+        }
         controller.Move(movement * movementSpeed * Time.deltaTime);
     }
 

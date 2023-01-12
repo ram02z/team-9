@@ -44,6 +44,15 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Questions"",
+                    ""type"": ""Value"",
+                    ""id"": ""e33eb8ab-68ef-4dcc-be67-f2ac0d6c21ca"",
+                    ""expectedControlType"": ""Key"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -112,6 +121,17 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""75368dca-195e-4202-9861-cc9fee1be3eb"",
+                    ""path"": ""<Keyboard>/#(E)"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""Questions"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -139,6 +159,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
+        m_Player_Questions = m_Player.FindAction("Questions", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -200,12 +221,14 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     private IPlayerActions m_PlayerActionsCallbackInterface;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Move;
+    private readonly InputAction m_Player_Questions;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
         public PlayerActions(@Controls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Move => m_Wrapper.m_Player_Move;
+        public InputAction @Questions => m_Wrapper.m_Player_Questions;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -221,6 +244,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @Move.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
                 @Move.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMove;
+                @Questions.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQuestions;
+                @Questions.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQuestions;
+                @Questions.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnQuestions;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -231,6 +257,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @Move.started += instance.OnMove;
                 @Move.performed += instance.OnMove;
                 @Move.canceled += instance.OnMove;
+                @Questions.started += instance.OnQuestions;
+                @Questions.performed += instance.OnQuestions;
+                @Questions.canceled += instance.OnQuestions;
             }
         }
     }
@@ -248,5 +277,6 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     {
         void OnLook(InputAction.CallbackContext context);
         void OnMove(InputAction.CallbackContext context);
+        void OnQuestions(InputAction.CallbackContext context);
     }
 }
