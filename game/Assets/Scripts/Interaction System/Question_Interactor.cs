@@ -23,14 +23,11 @@ public class Question_Interactor : MonoBehaviour, I_Interactable
         quizManager.quizCanvas.SetActive(true);
         if (isCorrect)
         {
-            Correct();
+            ShowCodePanel();
         }
         else if (isCooldown)
         {
-            quizManager.quizPanel.SetActive(false);
-            quizManager.answerPanel.SetActive(true);
-            quizManager.codePanel.SetActive(false);
-            quizManager.cooldownPanel.SetActive(true);
+            ShowCooldownPanel();
         }
         else
         {
@@ -42,27 +39,38 @@ public class Question_Interactor : MonoBehaviour, I_Interactable
         return true;
     }
 
+    private void ShowCodePanel()
+    {
+        quizManager.quizPanel.SetActive(false);
+        quizManager.answerPanel.SetActive(true);
+        quizManager.codePanel.SetActive(true);
+        quizManager.cooldownPanel.SetActive(false);
+    }
+
+    private void ShowCooldownPanel()
+    {
+
+        quizManager.quizPanel.SetActive(false);
+        quizManager.answerPanel.SetActive(true);
+        quizManager.codePanel.SetActive(false);
+        quizManager.cooldownPanel.SetActive(true);
+    }
+
     /// <summary>
     /// Move to the next question
     /// </summary>
     public void Correct()
     {
         isCorrect = true;
-        quizManager.quizPanel.SetActive(false);
-        quizManager.answerPanel.SetActive(true);
-        quizManager.codePanel.SetActive(true);
-        quizManager.cooldownPanel.SetActive(false);
         quizManager.codeText.text = $"The code is {Code}";
+        ShowCodePanel();
     }
 
     public void Wrong()
     {
-        quizManager.quizPanel.SetActive(false);
-        quizManager.answerPanel.SetActive(true);
-        quizManager.codePanel.SetActive(false);
-        quizManager.cooldownPanel.SetActive(true);
         isCooldown = true;
         StartCoroutine(Cooldown());
+        ShowCooldownPanel();
     }
 
     private IEnumerator Cooldown() {
