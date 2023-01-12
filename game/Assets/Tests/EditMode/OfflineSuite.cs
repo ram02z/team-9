@@ -61,7 +61,7 @@ namespace Tests.EditMode
             Assert.AreEqual(networkRoomManager.maxConnections, 2);
             Assert.AreEqual(networkRoomManager.transport, kcpTransport);
             Assert.AreEqual(networkRoomManager.showRoomGUI, true);
-            var player = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/TmpCharacter.prefab");
+            var player = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/Player.prefab");
             Assert.AreEqual(networkRoomManager.playerPrefab, player);
             var networkRoomPlayer = AssetDatabase.LoadAssetAtPath<NetworkRoomPlayer>("Assets/Prefabs/RoomPlayer.prefab");
             Assert.AreEqual(networkRoomManager.roomPlayerPrefab, networkRoomPlayer);
