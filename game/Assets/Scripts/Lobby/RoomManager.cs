@@ -20,7 +20,7 @@ using System;
 public class RoomManager : NetworkRoomManager
 {
     #region Server Callbacks
-    
+
     public static event Action<NetworkConnection> OnServerPlayerAdded;
 
     /// <summary>
@@ -105,7 +105,9 @@ public class RoomManager : NetworkRoomManager
     /// <returns>False to not allow this player to replace the room player.</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(NetworkConnectionToClient conn, GameObject roomPlayer, GameObject gamePlayer)
     {
-        return base.OnRoomServerSceneLoadedForPlayer(conn, roomPlayer, gamePlayer);
+        GamePlayer player = gamePlayer.GetComponent<GamePlayer>();
+        player.index = roomPlayer.GetComponent<NetworkRoomPlayer>().index;
+        return true;
     }
 
     /// <summary>
