@@ -7,6 +7,8 @@ public class PlayerMovementController : NetworkBehaviour
 {
     [SerializeField] private float movementSpeed = 5f;
     [SerializeField] private CharacterController controller = null;
+    [SerializeField] private Animator animator = null;
+
 
     private Vector2 previousInput;
 
@@ -33,13 +35,18 @@ public class PlayerMovementController : NetworkBehaviour
     [ClientCallback]
     private void OnDisable() => Controls.Disable();
     [ClientCallback]
-    private void Update() => Move();
+    private void Update() {
+      if(!isOwned) {return;}
+      Move();
+      animator.SetBool("isWalking", controller.velocity.magnitude > 0.2f);
+    }  
 
     [Client]
     private void SetMovement(Vector2 movement) => previousInput = movement;
 
     [Client]
     private void ResetMovement() => previousInput = Vector2.zero;
+
 
     [Client]
     private void Move() {
