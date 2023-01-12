@@ -7,7 +7,7 @@
   {
     "utterance": "Find the product of 72 x 3",
     "choices": ["216", "7230", "106", "372"],
-    "answerIndex": 0 
+    "answerIndex": 0
   },
   {
     "utterance": "Simplify: 26 + 32 - 12",
@@ -18,5 +18,35 @@
     "utterance": "Solve: 24 + 4 ÷ 4",
     "choices": ["25", "6", "28", "7"],
     "answerIndex": 0
+  },
+  {
+    "utterance": "Solve: 200 - (96 ÷ 4)",
+    "choices": ["105", "176", "26", "16"],
+    "answerIndex": 1
+  },
+  {
+    "utterance": "Solve: 832 - 457 + 3",
+    "choices": ["375", "57", "378", "970"],
+    "answerIndex": 2
+  },
+  {
+    "utterance": "Simplify: 150 ÷ (6 + 3 x 8) - 5",
+    "choices": ["2", "5", "0", "1"],
+    "answerIndex": 2
+  },
+  {
+    "utterance": "Solve: 4.16 x 0.75",
+    "choices": ["0.312", "0.0312", "3.12", "31.2"],
+    "answerIndex": 2
+  },
+  {
+    "utterance": "Solve: 90112 - 3123",
+    "choices": ["86989", "87099", "93235", "96989"],
+    "answerIndex":0
+  },
+  {
+    "utterance": "Solve: 0.05 x 0.09 x 5",
+    "choices": ["0.005", "0.0225", "0.025", "0.225"],
+    "answerIndex":0
   }
 ]

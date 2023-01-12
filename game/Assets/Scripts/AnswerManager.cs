@@ -1,10 +1,10 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class AnswerManager : MonoBehaviour
 {
     public bool isCorrect;
-    public QuizManager quizManager;
-    private System.Random _rnd;
+    public Question_Interactor questionInteractor;
 
     /// <summary>
     /// Handles the behaviour post answer
@@ -12,28 +12,20 @@ public class AnswerManager : MonoBehaviour
     /// </summary>
     public void Answer()
     {
-        if (quizManager.isTimerOn)
+        if (questionInteractor.isCooldown)
         {
-            Debug.LogError("Can't select option whilst timer is on");
+            Debug.LogError("On cooldown. Try again later!");
             return;
         }
-
         if (isCorrect)
         {
-            quizManager.Correct();
+            questionInteractor.Correct();
             Debug.Log("Correct Answer");
-            // TODO: handle behaviour when codes are exhausted
-            var code = quizManager.codes[0];
-            quizManager.codes.RemoveAt(0);
-
-            quizManager.answerText.text = $"The code is {code}";
         }
         else
         {
-            quizManager.isTimerOn = true;
+            questionInteractor.Wrong();
             Debug.Log("Wrong Answer");
         }
-        quizManager.quizPanel.SetActive(false);
-        quizManager.answerPanel.SetActive(true);
     }
 }

@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -5,6 +7,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using ErrorEventArgs = Newtonsoft.Json.Serialization.ErrorEventArgs;
 
@@ -12,21 +15,19 @@ public class QuizManager : MonoBehaviour
 {
     public List<int> codes;
     public List<Question> questions;
-    public float timeLeft;
-    public bool isTimerOn;
     public GameObject[] options;
-    public Question currentQuestion;
+    public GameObject[] interactables;
     public TextMeshProUGUI questionText;
     public GameObject quizCanvas;
-    public TextMeshProUGUI answerText;
+    public GameObject cooldownPanel;
+    public GameObject codePanel;
+    public TextMeshProUGUI codeText;
+    public TextMeshProUGUI cooldownText;
     public GameObject quizPanel;
     public GameObject answerPanel;
     public Button closeButton;
     private System.Random _rnd;
 
-    private readonly int _noQuestions = 3;
-    private readonly int _noCodes = 4;
-    private readonly float _timeoutLength = 10;
 
     /// <summary>
     /// Initialise the quiz manager
@@ -35,12 +36,8 @@ public class QuizManager : MonoBehaviour
     {
         _rnd = new System.Random();
 
-        // Initialise timer variables
-        timeLeft = _timeoutLength;
-        isTimerOn = false;
-
         // Create N 4 digit codes
-        codes = Enumerable.Range(1000, 9000).OrderBy(_ => _rnd.Next()).Take(_noCodes).ToList();
+        codes = Enumerable.Range(1000, 9000).OrderBy(_ => _rnd.Next()).Take(interactables.Length).ToList();
 
         // Load questions from JSON file
         using StreamReader r = new StreamReader("questions.json");
@@ -48,55 +45,20 @@ public class QuizManager : MonoBehaviour
 
         // Initialise quiz
         LoadQuestions(json);
-        GenerateQuestion();
+        AttachQuestionsToInteractables();
         SetupListeners();
     }
 
-    /// <summary>
-    /// Update the timer if active
-    /// </summary>
-    // TODO: move this function to answerManager
-    private void Update()
+    private void AttachQuestionsToInteractables()
     {
-        if (!isTimerOn) return;
-
-        if (timeLeft > 0)
+        for (int i = 0; i < interactables.Length; i++)
         {
-            timeLeft -= Time.deltaTime;
-            answerText.text = $"{Mathf.CeilToInt(timeLeft)}";
-        }
-        else
-        {
-            isTimerOn = false;
-            timeLeft = _timeoutLength;
-            answerPanel.SetActive(false);
-            quizPanel.SetActive(true);
-        }
-    }
-
-    /// <summary>
-    /// Move to the next question
-    /// </summary>
-    public void Correct()
-    {
-        GenerateQuestion();
-    }
-
-    /// <summary>
-    /// Set answers to GameObjects
-    /// </summary>
-    void SetAnswers()
-    {
-        for (int i = 0; i < options.Length; i++)
-        {
-            var option = options[i];
-            option.GetComponent<AnswerManager>().isCorrect = false;
-            option.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = currentQuestion.choices[i];
-
-            if (currentQuestion.answerIndex == i)
-            {
-                option.GetComponent<AnswerManager>().isCorrect = true;
-            }
+            var interactable = interactables[i];
+            int randomIdx = _rnd.Next(questions.Count);
+            interactable.GetComponent<Question_Interactor>().Question = questions[randomIdx];
+            questions.RemoveAt(randomIdx);
+            interactable.GetComponent<Question_Interactor>().Code = codes[0];
+            codes.RemoveAt(0);
         }
     }
 
@@ -108,27 +70,8 @@ public class QuizManager : MonoBehaviour
         closeButton.onClick.AddListener(() =>
         {
             quizCanvas.SetActive(false);
-            // TODO: lock position and camera
+            // TODO: unlock position and camera
         });
-    }
-
-    /// <summary>
-    /// Generate new question if new question exists
-    /// </summary>
-    private void GenerateQuestion()
-    {
-        if (questions.Count > 0)
-        {
-            currentQuestion = questions[0];
-            questions.RemoveAt(0);
-            questionText.text = currentQuestion.utterance;
-            SetAnswers();
-        }
-        else
-        {
-            Debug.Log("Out of questions");
-        }
-
     }
 
     /// <summary>
@@ -168,9 +111,6 @@ public class QuizManager : MonoBehaviour
         if (invalidChoices)
         {
             Debug.LogError("JSON contains invalid number of choices. Should be 4.");
-            return;
         }
-
-        questions = questions.OrderBy(_ => _rnd.Next()).Take(_noQuestions).ToList();
     }
 }
